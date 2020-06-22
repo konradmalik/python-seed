@@ -1,0 +1,24 @@
+FROM python:3.7-slim
+
+MAINTAINER Konrad Malik <konrad.malik@gmail.com>
+
+ARG module
+ARG package
+ENV module=$module
+ENV package=$package
+
+# Install requirements early so we can change code and re-build quickly
+COPY requirements-prod.txt requirements.txt
+RUN  pip install --no-cache-dir -r requirements.txt
+
+ADD ./${module} /app/${module}
+ADD ./tests /app/tests
+WORKDIR /app
+COPY local.ini local.ini
+COPY docker.ini overrides.ini
+
+ENV DEMO=docker-demo
+
+# exectute start up script (use unbuffered for docker logs)
+CMD ["sh", "-c", "python -u -m $module.$package"]
+
