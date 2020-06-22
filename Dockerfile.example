@@ -2,14 +2,14 @@ FROM python:3.7-slim
 
 MAINTAINER Konrad Malik <konrad.malik@gmail.com>
 
+# Install requirements early so we can change code and re-build quickly
+COPY requirements-prod.txt requirements.txt
+RUN  pip install --no-cache-dir -r requirements.txt
+
 ARG module
 ARG package
 ENV module=$module
 ENV package=$package
-
-# Install requirements early so we can change code and re-build quickly
-COPY requirements-prod.txt requirements.txt
-RUN  pip install --no-cache-dir -r requirements.txt
 
 ADD ./${module} /app/${module}
 ADD ./tests /app/tests
