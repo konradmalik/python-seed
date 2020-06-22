@@ -1,24 +1,22 @@
-FROM python:3.7-slim
-
-MAINTAINER Konrad Malik <konrad.malik@gmail.com>
-
-ARG module
-ARG package
-ENV module=$module
-ENV package=$package
+FROM tiangolo/meinheld-gunicorn-flask:python3.7
 
 # Install requirements early so we can change code and re-build quickly
 COPY requirements-prod.txt requirements.txt
 RUN  pip install --no-cache-dir -r requirements.txt
 
+ARG module
+ARG package
+
 ADD ./${module} /app/${module}
-ADD ./tests /app/tests
 WORKDIR /app
 COPY local.ini local.ini
 COPY docker.ini overrides.ini
 
 ENV DEMO=docker-demo
-
-# exectute start up script (use unbuffered for docker logs)
-CMD ["sh", "-c", "python -u -m $module.$package"]
-
+ENV LOG_LEVEL=info
+ 
+ENV MODULE_NAME="$module.$package.__main__"
+ENV VARIABLE_NAME="app"
+ENV WEB_CONCURRENCY=1
+ENV HOST=0.0.0.0
+ENV PORT=5000

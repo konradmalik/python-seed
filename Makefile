@@ -1,7 +1,7 @@
 ORG=konradmalik
 VENV_NAME?=venv
 MODULE=example
-PACKAGE=demo
+PACKAGE=api
 PYTHON=${VENV_NAME}/bin/python3
 
 define run_cmd
@@ -17,6 +17,7 @@ endef
 
 define docker_run_cmd
 	docker run --rm \
+		-p 5000:5000 \
 		$(ORG)/$(1):latest
 endef
 
