@@ -36,6 +36,7 @@ clean:
 	find . -type f -name "*.pyc" -delete
 
 lint: venv
+	${PYTHON} -m autopep8 --in-place -a -a -r ${MODULE}
 	${PYTHON} -m pylint --exit-zero ${MODULE}
 	${PYTHON} -m mypy --ignore-missing-imports ${MODULE}
 
