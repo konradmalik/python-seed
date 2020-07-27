@@ -38,6 +38,7 @@ clean:
 
 lint: venv
 	${PYTHON} -m autopep8 --in-place -a -a -r ${MODULE}
+	${PYTHON} -m autoflake --in-place --recursive --remove-all-unused-imports ${MODULE}
 	${PYTHON} -m pylint --exit-zero ${MODULE}
 	${PYTHON} -m mypy --ignore-missing-imports ${MODULE}
 
