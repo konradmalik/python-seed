@@ -4,6 +4,8 @@ MODULE=example
 PACKAGE=demo
 PYTHON=${VENV_NAME}/bin/python3
 
+.PHONY: dist
+
 define run_cmd
 	${PYTHON} -m ${MODULE}.$(1)
 endef
@@ -49,3 +51,7 @@ build-$(MODULE): Dockerfile.$(MODULE)
 
 docker-run-$(MODULE): build-$(MODULE)
 	$(call docker_run_cmd,$(MODULE))
+
+dist:
+	rm -rf *.egg-info
+	${PYTHON} setup.py sdist bdist_wheel
